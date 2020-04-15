@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hue Control</title>
+    <link rel="stylesheet" href="bulma.css">
+    <script defer src="fontawesome.js"></script>
+    <script src="jquery-3.5.0.min.js"></script>
+    <script src="hue.js"></script>
+    <script src="jscolor.js"></script>
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Hue Control
+      </h1>
+      <p class="subtitle">
+        Simple web app to control <strong>Philips Hue</strong>!
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div id="hue">
+        <div id="lights"></div>
+        <div id="groups"></div>
+      </div>
+    </div>
+  </section>
+  <script>
+    setInterval(function() {
+      hueLightsGet();
+      hueGroupsGet();
+    }, 5000);
+    hueLightsGet();
+    hueGroupsGet();
+
+    function hueLightsLoad(data) {
+      console.log(data);
+      console.log(data.length);
+      var html = "";
+      Object.keys(data).forEach(function(key,index) {
+        console.log(data[key]);
+        var hexcolor;
+        if (data[key].state.colormode == "ct") {
+          console.log("bri: " + data[key].state.bri + ", ct: " + data[key].state.ct);
+        } else if (data[key].state.colormode == "hs") {
+          console.log("bri: " + data[key].state.bri + ", hue: " + data[key].state.hue + ", sat: " + data[key].state.sat);
+          hexcolor = hsvToRgb(data[key].state.hue, data[key].state.sat);
+          console.log(hexcolor);
+        } else if (data[key].state.colormode == "xy") {
+          console.log("bri: " + data[key].state.bri + ", x: " + data[key].state.xy[0] + ", y: " + data[key].state.xy[1]);
+          hexcolor = xyBriToRgb(data[key].state.xy[0], data[key].state.xy[1]);
+          console.log(hexcolor);
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "' class='card huelight' id='huelight-" + key + "'>";
+        html += "Light: " + data[key].name + " ";
+        html += "<input class='jscolor' onchange='setLight([" + key + "], " + data[key].state.bri + ", this.jscolor)' value='" + hexcolor + "'>";
+        html += "</div>";
+      });
+      $("#hue #lights").html(html);
+      jscolor.installByClassName("jscolor");
+    }
+
+
+    function hueGroupsLoad(data) {
+      console.log(data);
+      console.log(data.length);
+      var html = "";
+      Object.keys(data).forEach(function(key,index) {
+        if (data[key].type !== "Room") {
+          return;
+        }
+        console.log(data[key]);
+        var hexcolor;
+        if (data[key].action.colormode == "ct") {
+          console.log("bri: " + data[key].action.bri + ", ct: " + data[key].action.ct);
+        } else if (data[key].action.colormode == "hs") {
+          console.log("bri: " + data[key].action.bri + ", hue: " + data[key].action.hue + ", sat: " + data[key].action.sat);
+          hexcolor = hsvToRgb(data[key].action.hue, data[key].action.sat);
+          console.log(hexcolor);
+        } else if (data[key].action.colormode == "xy") {
+          console.log("bri: " + data[key].action.bri + ", x: " + data[key].action.xy[0] + ", y: " + data[key].action.xy[1]);
+          hexcolor = xyBriToRgb(data[key].action.xy[0], data[key].action.xy[1]);
+          console.log(hexcolor);
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "' class='card huegroup' id='huegroup-" + key + "'>";
+        html += "Group: " + data[key].name + " ";
+        html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
+        html += "</div>";
+      });
+      $("#hue #groups").html(html);
+      jscolor.installByClassName("jscolor");
+    }
+
+
+
+
+    function setLight(lightid, bri, color) {
+/////////      for (var i = 0; i < lightid.length; i++) {
+        console.log(lightid + " " + color);
+        console.log("bri: " + bri);
+        console.log(hexToHs(color));
+        var hue = hexToHs(color).h;
+        var sat = hexToHs(color).s;
+        hueLightSetColor(lightid, true, bri, hue, sat, 3);
+///////      }
+    }
+  </script>
+  </body>
+</html>
