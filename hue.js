@@ -72,18 +72,22 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
   }
 
   var request = {"bri": bri, "transitiontime": transitiontime};
-  $.ajax({
+  for (var i = 0; i < lightid.length; i++) {
+    $.ajax({
         type: "PUT",
-        url: hueURL + "/lights/" + lightid + "/state",
+        url: hueURL + "/lights/" + lightid[i] + "/state",
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
             console.log(data);
+            hueLightsGet();
+            hueGroupsGet();
         },
         error: function() {
             alert('Error: No connection to Hue Bridge');
         }
-  });
+    });
+  }
 }
 
 function hueLightSetXY(lightid, on, bri, x, y, transitiontime) {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hue Control</title>
     <link rel="stylesheet" href="bulma.css">
+    <link rel="stylesheet" href="hue.css">
     <script defer src="fontawesome.js"></script>
     <script src="jquery-3.5.0.min.js"></script>
     <script src="hue.js"></script>
@@ -23,16 +24,41 @@
   </section>
   <section>
     <div class="container">
+
+      <div class="hue-tabs tabs is-boxed is-centered is-large">
+        <ul>
+          <li class="is-active">
+            <a onclick="$('.hue-tabs li').removeClass('is-active');$(this).parent().addClass('is-active'); $('#hue .rooms-container').hide(); $('#hue .groups-container').show();">
+              <span class="icon"><i class="fas fa-cubes" aria-hidden="true"></i></span>
+              <span>Rooms</span>
+            </a>
+          </li>
+          <li>
+            <a onclick="$('.hue-tabs li').removeClass('is-active');$(this).parent().addClass('is-active'); $('#hue .groups-container').hide(); $('#hue .rooms-container').show();">
+              <span class="icon"><i class="fas fa-lightbulb" aria-hidden="true"></i></span>
+              <span>Lights</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
       <div id="hue">
-        <div id="lights"></div>
-        <div id="groups"></div>
+        <div class="groups-container">
+            <div id="groups"></div>
+        </div>
+        <div class="rooms-container" style="margin-top: 20px; display: none;">
+            <div id="lights"></div>
+        </div>
       </div>
     </div>
   </section>
   <script>
     setInterval(function() {
-      hueLightsGet();
-      hueGroupsGet();
+      if (mouseDown == 0) {
+//        hueLightsGet();
+//        hueGroupsGet();
+      }
     }, 5000);
     hueLightsGet();
     hueGroupsGet();
@@ -60,6 +86,7 @@
         html += "Light: " + data[key].name + " ";
         html += "<input class='jscolor' onchange='setLight([" + key + "], " + data[key].state.bri + ", this.jscolor)' value='" + hexcolor + "'>";
         html += "</div>";
+        html += "<div class='brightness-slider'><input type='range' id='bri-slider-"+key+"' value='"+data[key].state.bri+"' min='0' max='254' onchange='setBrightness(["+key+"], this);'></div>";
       });
       $("#hue #lights").html(html);
       jscolor.installByClassName("jscolor");
@@ -92,6 +119,7 @@
         html += "Group: " + data[key].name + " ";
         html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
         html += "</div>";
+        html += "<div class='brightness-slider'><input type='range' id='bri-groupslider-"+key+"' value='"+data[key].action.bri+"' min='0' max='254' onchange='setBrightness(["+data[key].lights+"], this);'></div>";
       });
       $("#hue #groups").html(html);
       jscolor.installByClassName("jscolor");
@@ -110,6 +138,22 @@
         hueLightSetColor(lightid, true, bri, hue, sat, 3);
 ///////      }
     }
+
+    function setBrightness(lightid, bri) {
+      bri = bri.value;
+      console.log(lightid);
+      console.log(bri);
+      hueLightSetBrightness(lightid, parseInt(bri), 3);
+    }
+
+var mouseDown = 0;
+document.body.onmousedown = function() { 
+    mouseDown = 1;
+}
+document.body.onmouseup = function() {
+    mouseDown = 0;
+}
+
   </script>
   </body>
 </html>
