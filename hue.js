@@ -39,7 +39,6 @@ function hueGroupsGet() {
   });
 }
 
-
 function isNumeric(value) {
     return /^\d+$/.test(value);
 }
@@ -89,6 +88,27 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
     });
   }
 }
+
+function hueLightToggle(lightid, on) {
+  var request = {"on": on};
+  for (var i = 0; i < lightid.length; i++) {
+    $.ajax({
+        type: "PUT",
+        url: hueURL + "/lights/" + lightid[i] + "/state",
+        data: JSON.stringify(request),
+        datatype: "html",
+        success: function(data) {
+            console.log(data);
+            hueLightsGet();
+            hueGroupsGet();
+        },
+        error: function() {
+            alert('Error: No connection to Hue Bridge');
+        }
+    });
+  }
+}
+
 
 function hueLightSetXY(lightid, on, bri, x, y, transitiontime) {
   for (var i = 0; i < lightid.length; i++) {
@@ -258,4 +278,27 @@ function hexToHs (hex) {
         s: Math.round(s * 254)
 //        v: Math.round(v * 254)
     };
+}
+
+function lightOrDark(color) {
+
+  color = +("0x" + color.replace(
+  color.length < 5 && /./g, '$&$&'));
+
+  r = color >> 16;
+  g = color >> 8 & 255;
+  b = color & 255;
+
+  hsp = Math.sqrt(
+  0.299 * (r * r) +
+  0.587 * (g * g) +
+  0.114 * (b * b)
+  );
+
+  if (hsp>150) {
+    return 'light';
+  }
+  else {
+    return 'dark';
+  }
 }
