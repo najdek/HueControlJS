@@ -5,6 +5,13 @@
   margin: auto;
 }
 
+@media screen and (max-width: 768px) {
+  .modal-content, .modal-card {
+    margin: 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+  }
+}
 
 .huelight, .huegroup {
   height: 64px;
