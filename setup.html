@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height = device-height, width=device-width, initial-scale=0.85, maximum-scale=1, user-scalable = no">
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="theme-color" content="#0099CC" />
+    <meta name="mobile-web-app-capable" content="no" />
+    <title>Hue Control - Setup</title>
+    <link rel="stylesheet" href="bulma.css">
+    <script defer src="fontawesome.js"></script>
+    <script src="jquery-3.5.0.min.js"></script>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Configuration
+      </h1>
+      <p class="subtitle">
+        Connect to your Philips Hue bridge
+      </p>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div id="main" style="text-align: center; font-size: 20px; font-weight: bold;"></div>
+    </div>
+  </section>
+</body>
+<script>
+    getBridges();
+
+    function getBridges() {
+      $.getJSON('https://discovery.meethue.com/')
+      .done(function(data) {
+        console.log(data); 
+        html = "";
+        for (var i = 0; i < data.length; i++) {
+          console.log(data[i]);
+
+          if (data[i].id == getBridge("id")) {
+            if (data[i].internalipaddress == getBridge("ip")) {
+              $("#main").html("Bridge is already connected!");
+              setTimeout(function(){
+                window.location.href = "./";
+              }, 1000);
+              return;
+            } else {
+              updateIp(data[i].internalipaddress);
+              return;
+            }
+          }
+
+          html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick=\x22setupBridge('"+data[i].internalipaddress+"', '"+data[i].id+"');\x22>"+data[i].internalipaddress + " (" + data[i].id +")</button>";
+        }
+        $("#main").html(html);
+      })
+      .fail(function() {
+        alert('Error connecting to meethue.com!');
+      })
+    }
+
+    function setupBridge(ip, id) {
+      console.log(ip);
+      console.log(id);
+
+      $.post("http://" + ip + "/api", JSON.stringify({"devicetype": "HueControlJS"}))
+      .done(function(data) {
+        console.log(data);
+        if (data[0].error) {
+          if (data[0].error.type == 101) {
+            console.log("error");
+            $("#main").html("Press link button on your bridge!");
+            setTimeout(function(){
+              setupBridge(ip, id);
+            }, 5000);
+          } else {
+            $("#main").html("Unknown error:");
+            $("#main").append("<pre>"+JSON.stringify(data)+"</pre>");
+          }
+        } else if (data[0].success) {
+          console.log("success");
+          saveBridge(ip, id, data[0].success.username);
+        } else {
+          $("#main").html("Unknown error:");
+          $("#main").append("<pre>"+JSON.stringify(data)+"</pre>");
+        }
+      })
+      .fail(function() {
+        $("#main").html("Error connecting to bridge!");
+        setTimeout(function(){
+          window.location.reload();
+        }, 5000);
+
+      })
+    }
+
+    function saveBridge(ip, id, username) {
+      var d = new Date();
+      d.setTime(d.getTime() + (10*365*24*60*60*1000)); // 10 years
+      var expires = "expires="+ d.toUTCString();
+      document.cookie = "bridge=" + ip + "|" + id + "|" + username + ";" + expires + ";path=/";
+      $("#main").html("Bridge connected!");
+      setTimeout(function(){
+        window.location.href = "./";
+      }, 3000);
+
+    }
+
+
+    function getBridge(a) {
+      data = getCookie("bridge").split("|");
+      if (a == "ip") {
+        return data[0];
+      } else if (a == "id") {
+        return data[1];
+      } else if (a == "username") {
+        return data[2];
+      } else {
+        return data;
+      }
+    }
+
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    function updateIp(ip) {
+      saveBridge(ip, getBridge("id"), getBridge("username"));
+      $("#main").html("Updated bridge ip address");
+      setTimeout(function(){
+        window.location.href = "./";
+      }, 1000);
+
+    }
+</script>
+</html>

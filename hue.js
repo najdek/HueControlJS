@@ -1,5 +1,5 @@
-var hueUser = "API_KEY";
-var hueIP = "192.168.1.120";
+var hueUser = getBridge("username");
+var hueIP = getBridge("ip");
 
 var hueURL = "http://" + hueIP + "/api/" + hueUser;
 
@@ -17,7 +17,7 @@ function hueLightsGet() {
             hueLightsLoad(data);
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
   });
 }
@@ -34,7 +34,7 @@ function hueGroupsGet() {
             hueGroupsLoad(data);
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
   });
 }
@@ -302,3 +302,36 @@ function lightOrDark(color) {
     return 'dark';
   }
 }
+
+
+
+function getBridge(a) {
+  data = getCookie("bridge").split("|");
+  if (a == "ip") {
+    return data[0];
+  } else if (a == "id") {
+    return data[1];
+  } else if (a == "username") {
+    return data[2];
+  } else {
+    return data;
+  }
+}
+
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
