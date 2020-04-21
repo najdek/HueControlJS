@@ -114,6 +114,7 @@ function pickColor(mode, id, currentcolor, groupid) {
   pickColorIds = id;
   pickColorMode = mode;
   pickGroupId = groupid;
+
   $("#color-picker-modal").show();
 }
 
@@ -148,11 +149,19 @@ function pickColor(mode, id, currentcolor, groupid) {
           console.log(hexcolor);
         }
 
-        if (lightOrDark(hexcolor) == "light") {
-          html += "<div style='background-color: #" + hexcolor + "' class='card huelight' id='huelight-" + key + "'>";
-        } else {
-          html += "<div style='background-color: #" + hexcolor + "; color: white;' class='card huelight' id='huelight-" + key + "'>";
+        if (data[key].state.on == false) {
+          hexcolor = "999999";
         }
+
+        if (lightOrDark(hexcolor) == "light") {
+          var hueLightBtnBgColor = "#ffffff66";
+          var hueLightBtnColor = "#000000";
+        } else {
+          var hueLightBtnBgColor = "#00000044";
+          var hueLightBtnColor = "#ffffff";
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight' id='huelight-" + key + "'>";
         html += data[key].name;
 //        html += "<input style='display: none;' id='huelight-"+key+"-input' class=\x22jscolor {width:100vw, height:150, position:'right'}\x22 onchange='setLight([" + key + "], " + data[key].state.bri + ", this.jscolor)' value='" + hexcolor + "'>";
 //        html += "<button class=\x22jscolor {valueElement: \x27huelight-"+key+"-input\x27}\x22>Pick a color</button>";
@@ -160,10 +169,10 @@ function pickColor(mode, id, currentcolor, groupid) {
 //        html += "<span onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22>pick_color</span>";
 
         if (data[key].state.on == true) {
-          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on'></i></span></button>";
-          html += "<button onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22 style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette'></i></span></button>";
+          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22 style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
-          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off'></i></span></button>";
+          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
 
         html += "</div>";
@@ -200,19 +209,27 @@ function pickColor(mode, id, currentcolor, groupid) {
           console.log(hexcolor);
         }
 
-        if (lightOrDark(hexcolor) == "light") {
-          html += "<div style='background-color: #" + hexcolor + "' class='card huegroup' id='huegroup-" + key + "'>";
-        } else {
-          html += "<div style='background-color: #" + hexcolor + "; color: white;' class='card huegroup' id='huegroup-" + key + "'>";
+        if (data[key].action.on == false) {
+          hexcolor = "999999";
         }
+
+        if (lightOrDark(hexcolor) == "light") {
+          var hueLightBtnBgColor = "#ffffff66";
+          var hueLightBtnColor = "#000000";
+        } else {
+          var hueLightBtnBgColor = "#00000044";
+          var hueLightBtnColor = "#ffffff";
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup' id='huegroup-" + key + "'>";
         html += data[key].name;
 //        html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
 //        html += "<span onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22>pick_color</span>";
         if (data[key].action.on == true) {
-          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on'></i></span></button>";
-          html += "<button onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette'></i></span></button>";
+          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
-          html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 64px; height: 64px; background-color: #ffffff66; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off'></i></span></button>";
+          html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
         html += "</div>";
         if (data[key].action.on == true) {
