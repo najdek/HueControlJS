@@ -65,7 +65,7 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
               hueLightSetBrightness(lightid, newBri, transitiontime);
           },
           error: function() {
-              alert('Error: No connection to Hue Bridge');
+              window.location.href = "setup.html";
           }
     });
   }
@@ -83,7 +83,7 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
             hueGroupsGet();
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
     });
   }
@@ -103,7 +103,7 @@ function hueLightToggle(lightid, on) {
             hueGroupsGet();
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
     });
   }
@@ -124,7 +124,7 @@ function hueLightSetXY(lightid, on, bri, x, y, transitiontime) {
             hueGroupsGet();
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
     });
   }
@@ -144,7 +144,7 @@ function hueLightSetColor(lightid, on, bri, hue, sat, transitiontime) {
             hueGroupsGet();
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
     });
   }
@@ -164,7 +164,7 @@ function hueLightSetWhite(lightid, on, bri, ct, transitiontime) {
             hueGroupsGet();
         },
         error: function() {
-            alert('Error: No connection to Hue Bridge');
+            window.location.href = "setup.html";
         }
     });
   }

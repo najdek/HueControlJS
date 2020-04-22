@@ -15,10 +15,10 @@
   <section class="section">
     <div class="container">
       <h1 class="title">
-        Configuration
+        Hue Control
       </h1>
       <p class="subtitle">
-        Connect to your Philips Hue bridge
+        Simple web app to control <strong>Philips Hue</strong>!
       </p>
     </div>
   </section>
@@ -36,9 +36,15 @@
       .done(function(data) {
         console.log(data); 
         html = "";
+        if (data.length == 0) {
+          html += "No Philips Hue bridges found in your network.";
+        } else if (data.length == 1) {
+          html += "Found one Philips Hue bridge in your network:<br>";
+        } else {
+          html += "Found " + data.length + " Philips Hue bridges in your network:<br>";
+        }
         for (var i = 0; i < data.length; i++) {
           console.log(data[i]);
-
           if (data[i].id == getBridge("id")) {
             if (data[i].internalipaddress == getBridge("ip")) {
               $("#main").html("Bridge is already connected!");
@@ -57,7 +63,7 @@
         $("#main").html(html);
       })
       .fail(function() {
-        alert('Error connecting to meethue.com!');
+        $("#main").html("Error connecting to meethue.com (bridge discovery)");
       })
     }
 
