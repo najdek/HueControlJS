@@ -49,6 +49,7 @@ html, body {
 }
 .button:hover {
   border-color: #44444499;
+  color: #ffffff;
 }
 footer.footer {
   margin-top: 60px;
