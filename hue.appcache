@@ -1,0 +1,19 @@
+CACHE MANIFEST
+
+CACHE:
+index.html
+setup.html
+hue.js
+fontawesome.js
+jquery-3.5.0.min.js
+iro.js
+hue.css
+bulma.css
+icons/favicon.ico
+
+SETTINGS:
+prefer-online
+
+FALLBACK:
+/ /offline.html
+
