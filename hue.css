@@ -71,7 +71,11 @@ footer.footer a:hover {
   color: #ffffff;
 }
 #hue #groups, #hue #lights {
-  padding: 0px 20px;
+  padding: 0px 10px;
+}
+.huegroup button, .huelight button {
+  border-width: 0;
+  background-color: #00000000 !important;
 }
 .huegroup, .huelight {
   border-radius: 20px 20px 0px 0px;
