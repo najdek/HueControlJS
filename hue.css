@@ -44,12 +44,11 @@ html, body {
 }
 .button {
   background-color: #222c42;
-  color: #cccccc;
+  color: #ffffff;
   border-color: #00000044;
 }
 .button:hover {
   border-color: #44444499;
-  color: #ffffff;
 }
 footer.footer {
   margin-top: 60px;
