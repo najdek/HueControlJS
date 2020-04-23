@@ -1,34 +1,38 @@
 html, body {
-  background-color: #3a4766;
-  color: #ffffff;
+  background-color: #1e1e1e;
+  color: #dddddd;
 }
 .title {
-  color: #ffffff;
+  color: #dddddd;
 }
 .subtitle {
-  color: #cccccc;
+  color: #bbbbbb;
 }
 .subtitle strong {
-  color: #ffffff;
+  color: #dddddd;
 }
 .tabs.is-boxed li.is-active a {
   background-color: #00000044;
-  color: #ffffff;
-  border-color: #00000044;
+  color: #dddddd;
+  border-color: #2f2f2f !important;
+  border-width: 2px !important;
 }
 .tabs.is-boxed a:hover {
   background-color: #00000011;
-  color: #ffffff;
+  color: #dddddd;
   border-color: #00000022;
 }
 .tabs a {
-  color: #cccccc;
+  color: #888888;
+  border-radius: 20px !important;
+  margin-bottom: 0;
 }
 .tabs ul {
   border-bottom-color: #00000044;
+  border-bottom-width: 0;
 }
 .modal-card-head, .modal-card-foot {
-  background-color: #1a2233;
+  background-color: #1e1e1e;
 }
 .modal-card-head {
   border-bottom-color: #00000044;
@@ -40,10 +44,10 @@ html, body {
   color: #ffffff;
 }
 .modal-card-body {
-  background-color: #222c42;
+  background-color: #222222;
 }
 .button {
-  background-color: #222c42;
+  background-color: #2a2a2a;
   color: #ffffff;
   border-color: #00000044;
 }
@@ -61,12 +65,14 @@ footer.footer strong {
   color: #cccccc;
 }
 footer.footer a {
-  color: #8ba8d8;
+  color: #cccccc;
 }
 footer.footer a:hover {
-  color: #cadeff;
+  color: #ffffff;
 }
-
+#hue #groups, #hue #lights {
+  padding: 0px 20px;
+}
 .huegroup, .huelight {
   border-radius: 20px 20px 0px 0px;
 }
@@ -99,11 +105,11 @@ footer.footer a:hover {
 }
 
 .huelight, .huegroup {
-  height: 64px;
-  line-height: 64px;
+  height: 80px;
+  line-height: 80px;
   margin: 30px 0px 0px 0px;
-  padding: 0px 0px 0px 30px;
-  font-size: 18px;
+  padding: 0px 0px 0px 40px;
+  font-size: 20px;
   font-weight: bold;
 }
 

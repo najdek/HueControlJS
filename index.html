@@ -11,13 +11,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
     <link rel="manifest" href="/icons/site.webmanifest">
-    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#3a4766">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#1e1e1e">
     <link rel="shortcut icon" href="/icons/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Hue Control">
     <meta name="application-name" content="Hue Control">
-    <meta name="msapplication-TileColor" content="#3a4766">
+    <meta name="msapplication-TileColor" content="#1e1e1e">
     <meta name="msapplication-config" content="/icons/browserconfig.xml">
-    <meta name="theme-color" content="#3a4766">
+    <meta name="theme-color" content="#1e1e1e">
 
     <link rel="stylesheet" href="bulma.css">
     <link rel="stylesheet" href="hue.css">
@@ -193,10 +193,10 @@ function pickColor(mode, id, currentcolor, groupid) {
 //        html += "<span onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22>pick_color</span>";
 
         if (data[key].state.on == true) {
-          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22 style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
-          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
 
         html += "</div>";
@@ -256,10 +256,10 @@ function pickColor(mode, id, currentcolor, groupid) {
 //        html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
 //        html += "<span onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22>pick_color</span>";
         if (data[key].action.on == true) {
-          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
-          html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 64px; height: 64px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
         html += "</div>";
         if (data[key].action.on == true) {
