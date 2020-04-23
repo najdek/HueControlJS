@@ -83,6 +83,12 @@
       </footer>
     </div>
   </div>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p><strong>Hue Control</strong> by <a target="_blank" href="https://najdek.me/">Mateusz Najdek</a><br>
+      <a target="_blank" href="https://github.com/najdek/HueControlJS">GitHub repository</a></p>
+    </div>
+  </footer>
   <script>
 
 var colorPickerWidth;
@@ -173,7 +179,13 @@ function pickColor(mode, id, currentcolor, groupid) {
           var hueLightBtnColor = "#ffffff";
         }
 
-        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight' id='huelight-" + key + "'>";
+        if (data[key].state.on == true) {
+          var hueStateClass = "turned-on";
+        } else {
+          var hueStateClass = "turned-off";
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight "+hueStateClass+"' id='huelight-" + key + "'>";
         html += data[key].name;
 //        html += "<input style='display: none;' id='huelight-"+key+"-input' class=\x22jscolor {width:100vw, height:150, position:'right'}\x22 onchange='setLight([" + key + "], " + data[key].state.bri + ", this.jscolor)' value='" + hexcolor + "'>";
 //        html += "<button class=\x22jscolor {valueElement: \x27huelight-"+key+"-input\x27}\x22>Pick a color</button>";
@@ -233,7 +245,13 @@ function pickColor(mode, id, currentcolor, groupid) {
           var hueLightBtnColor = "#ffffff";
         }
 
-        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup' id='huegroup-" + key + "'>";
+        if (data[key].action.on == true) {
+          var hueStateClass = "turned-on";
+        } else {
+          var hueStateClass = "turned-off";
+        }
+
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup "+hueStateClass+"' id='huegroup-" + key + "'>";
         html += data[key].name;
 //        html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
 //        html += "<span onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22>pick_color</span>";

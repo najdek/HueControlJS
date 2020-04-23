@@ -1,3 +1,88 @@
+html, body {
+  background-color: #3a4766;
+  color: #ffffff;
+}
+.title {
+  color: #ffffff;
+}
+.subtitle {
+  color: #cccccc;
+}
+.subtitle strong {
+  color: #ffffff;
+}
+.tabs.is-boxed li.is-active a {
+  background-color: #00000044;
+  color: #ffffff;
+  border-color: #00000044;
+}
+.tabs.is-boxed a:hover {
+  background-color: #00000011;
+  color: #ffffff;
+  border-color: #00000022;
+}
+.tabs a {
+  color: #cccccc;
+}
+.tabs ul {
+  border-bottom-color: #00000044;
+}
+.modal-card-head, .modal-card-foot {
+  background-color: #1a2233;
+}
+.modal-card-head {
+  border-bottom-color: #00000044;
+}
+.modal-card-foot {
+  border-top-color: #00000044;
+}
+.modal-card-title {
+  color: #ffffff;
+}
+.modal-card-body {
+  background-color: #222c42;
+}
+.button {
+  background-color: #222c42;
+  color: #cccccc;
+  border-color: #00000044;
+}
+.button:hover {
+  border-color: #44444499;
+  color: #ffffff;
+}
+footer.footer {
+  margin-top: 60px;
+  background-color: #00000011;
+  color: #aaaaaa;
+  font-size: 13px;
+}
+footer.footer strong {
+  color: #cccccc;
+}
+footer.footer a {
+  color: #8ba8d8;
+}
+footer.footer a:hover {
+  color: #cadeff;
+}
+
+.huegroup, .huelight {
+  border-radius: 20px 20px 0px 0px;
+}
+.huegroup.turned-off, .huelight.turned-off {
+  border-radius: 20px;
+}
+.huegroup.turned-off button:first-of-type, .huelight.turned-off button:first-of-type {
+  border-radius: 0px 20px 20px 0px;
+}
+.huegroup button:first-of-type, .huelight button:first-of-type {
+  border-radius: 0px 20px 0px 0px;
+}
+.brightness-slider input {
+  border-radius: 0px 0px 20px 20px;
+}
+
 #color-picker .IroSlider {
   display: none !important;
 }
