@@ -25,6 +25,9 @@ html, body {
 .subtitle strong {
   color: #dddddd;
 }
+.checkbox:hover {
+  color: #ffffff;
+}
 .tabs.is-boxed li.is-active a {
   background-color: #00000044;
   color: #dddddd;
@@ -82,7 +85,13 @@ footer.footer a {
   color: #cccccc;
 }
 footer.footer a:hover {
-  color: #ffffff;
+  color: #ffffff !important;
+}
+.settings-button .button, .back-button .button {
+  color: #888888;
+}
+.settings-button .button:hover, .back-button .button:hover {
+  color: #dddddd;
 }
 #hue #groups, #hue #lights {
   padding: 0px 10px;

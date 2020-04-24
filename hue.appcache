@@ -3,6 +3,8 @@ CACHE MANIFEST
 CACHE:
 index.html
 setup.html
+settings.html
+offline.html
 hue.js
 fontawesome.js
 jquery-3.5.0.min.js

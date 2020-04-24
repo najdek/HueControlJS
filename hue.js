@@ -12,7 +12,7 @@ function hueLightsGet() {
         url: hueURL + "/lights/",
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
 //            hueLightsState = data;
             hueLightsLoad(data);
         },
@@ -29,7 +29,7 @@ function hueGroupsGet() {
         url: hueURL + "/groups/",
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
 //            hueLightsState = data;
             hueGroupsLoad(data);
         },
@@ -78,7 +78,7 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
             hueLightsGet();
             hueGroupsGet();
         },
@@ -98,7 +98,7 @@ function hueLightToggle(lightid, on) {
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
             hueLightsGet();
             hueGroupsGet();
         },
@@ -119,7 +119,7 @@ function hueLightSetXY(lightid, on, bri, x, y, transitiontime) {
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
             hueLightsGet();
             hueGroupsGet();
         },
@@ -139,7 +139,7 @@ function hueLightSetColor(lightid, on, bri, hue, sat, transitiontime) {
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
             hueLightsGet();
             hueGroupsGet();
         },
@@ -159,7 +159,7 @@ function hueLightSetWhite(lightid, on, bri, ct, transitiontime) {
         data: JSON.stringify(request),
         datatype: "html",
         success: function(data) {
-            console.log(data);
+            if(getCookie("debug") == "1") { console.log(data); }
             hueLightsGet();
             hueGroupsGet();
         },
@@ -318,6 +318,12 @@ function getBridge(a) {
   }
 }
 
+function setCookie(name, value){
+    var d = new Date();
+    d.setTime(d.getTime() + (10*365*24*60*60*1000)); // 10 years
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
 
 function getCookie(cname) {
   var name = cname + "=";

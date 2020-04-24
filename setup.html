@@ -7,10 +7,18 @@
     <meta name="theme-color" content="#1e1e1e">
     <meta name="mobile-web-app-capable" content="no" />
     <title>Hue Control - Setup</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#1e1e1e">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+
     <link rel="stylesheet" href="bulma.css">
     <link rel="stylesheet" href="hue.css">
     <script defer src="fontawesome.js"></script>
     <script src="jquery-3.5.0.min.js"></script>
+    <script src="hue.js"></script>
 </head>
 <body>
   <section class="section">
@@ -28,12 +36,6 @@
       <div id="main" style="text-align: center; font-size: 20px; font-weight: bold;"></div>
     </div>
   </section>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p><strong>Hue Control</strong> by <a target="_blank" href="https://najdek.me/">Mateusz Najdek</a><br>
-      <a target="_blank" href="https://github.com/najdek/HueControlJS">GitHub repository</a></p>
-    </div>
-  </footer>
 </body>
 <script>
     getBridges();
@@ -41,7 +43,7 @@
     function getBridges() {
       $.getJSON('https://discovery.meethue.com/')
       .done(function(data) {
-        console.log(data); 
+        if(getCookie("debug") == "1") { console.log(data); }
         html = "";
         if (data.length == 0) {
           html += "No Philips Hue bridges found in your network.";
@@ -51,7 +53,7 @@
           html += "Found " + data.length + " Philips Hue bridges in your network:<br>";
         }
         for (var i = 0; i < data.length; i++) {
-          console.log(data[i]);
+          if(getCookie("debug") == "1") { console.log(data[i]); }
           if (data[i].id == getBridge("id")) {
             if (data[i].internalipaddress == getBridge("ip")) {
               $("#main").html("Bridge is already connected!");
@@ -75,15 +77,14 @@
     }
 
     function setupBridge(ip, id) {
-      console.log(ip);
-      console.log(id);
+      if(getCookie("debug") == "1") { console.log(ip); }
+      if(getCookie("debug") == "1") { console.log(id); }
 
       $.post("http://" + ip + "/api", JSON.stringify({"devicetype": "HueControlJS"}))
       .done(function(data) {
-        console.log(data);
+        if(getCookie("debug") == "1") { console.log(data); }
         if (data[0].error) {
           if (data[0].error.type == 101) {
-            console.log("error");
             $("#main").html("Press link button on your bridge!");
             setTimeout(function(){
               setupBridge(ip, id);
@@ -93,7 +94,7 @@
             $("#main").append("<pre>"+JSON.stringify(data)+"</pre>");
           }
         } else if (data[0].success) {
-          console.log("success");
+          if(getCookie("debug") == "1") { console.log("success"); }
           saveBridge(ip, id, data[0].success.username);
         } else {
           $("#main").html("Unknown error:");
@@ -110,17 +111,13 @@
     }
 
     function saveBridge(ip, id, username) {
-      var d = new Date();
-      d.setTime(d.getTime() + (10*365*24*60*60*1000)); // 10 years
-      var expires = "expires="+ d.toUTCString();
-      document.cookie = "bridge=" + ip + "|" + id + "|" + username + ";" + expires + ";path=/";
+      setCookie("bridge", ip + "|" + id + "|" + username);
       $("#main").html("Bridge connected!");
       setTimeout(function(){
         window.location.href = "./";
       }, 3000);
 
     }
-
 
     function getBridge(a) {
       data = getCookie("bridge").split("|");
@@ -133,23 +130,6 @@
       } else {
         return data;
       }
-    }
-
-
-    function getCookie(cname) {
-      var name = cname + "=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(';');
-      for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
     }
 
     function updateIp(ip) {

@@ -68,6 +68,11 @@
       </div>
     </div>
   </section>
+
+  <a class="settings-button" href="settings.html" style="position: fixed; top: 0; right: 0;">
+    <button class="button" style="width: 80px; height: 80px; background-color: #00000000; border: 0;"><span class="icon is-large"><i class="fas fa-2x fa-cog"></i></span></button>
+  </a>
+
   <div id="color-picker-modal" class="modal">
     <div class="modal-background" onclick="$('#color-picker-modal').hide();"></div>
     <div class="modal-card">
@@ -83,20 +88,19 @@
       </footer>
     </div>
   </div>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p><strong>Hue Control</strong> by <a target="_blank" href="https://najdek.me/">Mateusz Najdek</a><br>
-      <a target="_blank" href="https://github.com/najdek/HueControlJS">GitHub repository</a></p>
-    </div>
-  </footer>
   <script>
+if (parseInt(getCookie("transition")) > -1) {
+  var settingTransitionTime = parseInt(getCookie("transition"));
+} else {
+  var settingTransitionTime = 3;
+}
 
 var colorPickerWidth;
 if ($(window).width() < 600) {
-  console.log($(window).width());
+  if(getCookie("debug") == "1") { console.log($(window).width()); }
   colorPickerWidth = $(window).width() - 40;
 } else {
-  console.log($(window).width());
+  if(getCookie("debug") == "1") { console.log($(window).width()); }
   colorPickerWidth = 560;
 }
 
@@ -111,15 +115,15 @@ var colorPicker = new iro.ColorPicker("#color-picker", {
 colorPicker.on(["input:end"], function(color){
   // Show the current color in different formats
   // Using the selected color: https://iro.js.org/guide.html#selected-color-api
-  console.log(color.hexString);
-  console.log(pickColorIds);
+  if(getCookie("debug") == "1") { console.log(color.hexString); }
+  if(getCookie("debug") == "1") { console.log(pickColorIds); }
   if (pickColorMode == "light") {
     bri = document.getElementById("bri-slider-" + pickColorIds).value;
     pickColorIds = [pickColorIds];
   } else if (pickColorMode == "group") {
     bri = document.getElementById("bri-groupslider-" + pickGroupId).value;
   }
-  console.log(bri);
+  if(getCookie("debug") == "1") { console.log(bri); }
   setLight(pickColorIds, bri, color.hexString.substring(1));  
 });
 
@@ -149,22 +153,22 @@ function pickColor(mode, id, currentcolor, groupid) {
     hueGroupsGet();
 
     function hueLightsLoad(data) {
-      console.log(data);
-      console.log(data.length);
+      if(getCookie("debug") == "1") { console.log(data); }
+      if(getCookie("debug") == "1") { console.log(data.length); }
       var html = "";
       Object.keys(data).forEach(function(key,index) {
-        console.log(data[key]);
+        if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].state.colormode == "ct") {
-          console.log("bri: " + data[key].state.bri + ", ct: " + data[key].state.ct);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].state.bri + ", ct: " + data[key].state.ct); }
         } else if (data[key].state.colormode == "hs") {
-          console.log("bri: " + data[key].state.bri + ", hue: " + data[key].state.hue + ", sat: " + data[key].state.sat);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].state.bri + ", hue: " + data[key].state.hue + ", sat: " + data[key].state.sat); }
           hexcolor = hsvToRgb(data[key].state.hue, data[key].state.sat);
-          console.log(hexcolor);
+          if(getCookie("debug") == "1") { console.log(hexcolor); }
         } else if (data[key].state.colormode == "xy") {
-          console.log("bri: " + data[key].state.bri + ", x: " + data[key].state.xy[0] + ", y: " + data[key].state.xy[1]);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].state.bri + ", x: " + data[key].state.xy[0] + ", y: " + data[key].state.xy[1]); }
           hexcolor = xyBriToRgb(data[key].state.xy[0], data[key].state.xy[1]);
-          console.log(hexcolor);
+          if(getCookie("debug") == "1") { console.log(hexcolor); }
         }
 
         if (data[key].state.on == false) {
@@ -212,25 +216,25 @@ function pickColor(mode, id, currentcolor, groupid) {
 
 
     function hueGroupsLoad(data) {
-      console.log(data);
-      console.log(data.length);
+      if(getCookie("debug") == "1") { console.log(data); }
+      if(getCookie("debug") == "1") { console.log(data.length); }
       var html = "";
       Object.keys(data).forEach(function(key,index) {
         if (data[key].type !== "Room") {
           return;
         }
-        console.log(data[key]);
+        if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].action.colormode == "ct") {
-          console.log("bri: " + data[key].action.bri + ", ct: " + data[key].action.ct);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].action.bri + ", ct: " + data[key].action.ct); }
         } else if (data[key].action.colormode == "hs") {
-          console.log("bri: " + data[key].action.bri + ", hue: " + data[key].action.hue + ", sat: " + data[key].action.sat);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].action.bri + ", hue: " + data[key].action.hue + ", sat: " + data[key].action.sat); }
           hexcolor = hsvToRgb(data[key].action.hue, data[key].action.sat);
-          console.log(hexcolor);
+          if(getCookie("debug") == "1") { console.log(hexcolor); }
         } else if (data[key].action.colormode == "xy") {
-          console.log("bri: " + data[key].action.bri + ", x: " + data[key].action.xy[0] + ", y: " + data[key].action.xy[1]);
+          if(getCookie("debug") == "1") { console.log("bri: " + data[key].action.bri + ", x: " + data[key].action.xy[0] + ", y: " + data[key].action.xy[1]); }
           hexcolor = xyBriToRgb(data[key].action.xy[0], data[key].action.xy[1]);
-          console.log(hexcolor);
+          if(getCookie("debug") == "1") { console.log(hexcolor); }
         }
 
         if (data[key].action.on == false) {
@@ -277,20 +281,20 @@ function pickColor(mode, id, currentcolor, groupid) {
 
     function setLight(lightid, bri, color) {
 /////////      for (var i = 0; i < lightid.length; i++) {
-        console.log(lightid + " " + color);
-        console.log("bri: " + bri);
-        console.log(hexToHs(color));
+        if(getCookie("debug") == "1") { console.log(lightid + " " + color); }
+        if(getCookie("debug") == "1") { console.log("bri: " + bri); }
+        if(getCookie("debug") == "1") { console.log(hexToHs(color)); }
         var hue = hexToHs(color).h;
         var sat = hexToHs(color).s;
-        hueLightSetColor(lightid, true, bri, hue, sat, 3);
+        hueLightSetColor(lightid, true, bri, hue, sat, settingTransitionTime);
 ///////      }
     }
 
     function setBrightness(lightid, bri) {
       bri = bri.value;
-      console.log(lightid);
-      console.log(bri);
-      hueLightSetBrightness(lightid, parseInt(bri), 3);
+      if(getCookie("debug") == "1") { console.log(lightid); }
+      if(getCookie("debug") == "1") { console.log(bri); }
+      hueLightSetBrightness(lightid, parseInt(bri), settingTransitionTime);
     }
 
 var mouseDown = 0;
