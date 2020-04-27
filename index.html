@@ -203,9 +203,11 @@ function pickColor(mode, type, id, currentcolor, groupid) {
 }
 
     setInterval(function() {
-      if (mouseDown == 0) {
-        hueLightsGet();
-        hueGroupsGet();
+      if(getCookie("debug") !== "1") {
+        if (mouseDown == 0) {
+          hueLightsGet();
+          hueGroupsGet();
+        }
       }
     }, 5000);
     hueLightsGet();

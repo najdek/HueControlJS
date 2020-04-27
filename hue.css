@@ -15,6 +15,7 @@ html, body {
   background-color: #1e1e1e;
   color: #dddddd;
   overflow-y: auto;
+  -webkit-tap-highlight-color: #00000000;
 }
 .title {
   color: #dddddd;
@@ -99,6 +100,9 @@ footer.footer a:hover {
 .huegroup button, .huelight button {
   border-width: 0;
   background-color: #00000000 !important;
+}
+.huegroup button:hover .icon svg, .huelight button:hover .icon svg {
+  color: #888888 !important;
 }
 .huegroup, .huelight {
   border-radius: 20px 20px 0px 0px;
