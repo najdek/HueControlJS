@@ -280,7 +280,88 @@ function hexToHs (hex) {
     };
 }
 
+function kelvinToCt(kelvin) {
+  minPicked = 2194.0536499023438;
+  maxPicked = 10991.905212402344;
+
+  pickedValue = kelvin - minPicked;
+  maxPicked = maxPicked - minPicked;
+
+  pickedValue = 1 - (pickedValue / maxPicked);
+
+  ctMin = 153;
+  ctMax = 500;
+
+  pickedValue = Math.round(((ctMax-ctMin) * pickedValue) + ctMin);
+  return pickedValue;
+}
+
+function ctToPickerKelvin(ct) {
+  ctMin = 153;
+  ctMax = 500;
+  minPicked = 2194.0536499023438;
+  maxPicked = 10991.905212402344;
+  value = 1 - ((ct - ctMin) / (ctMax - ctMin));
+  value = (value * (maxPicked - minPicked)) + minPicked;
+  return value;
+}
+
+function kelvinToRgb(kelvin) {
+ // source: https://gist.github.com/paulkaplan/5184275
+    var temp = kelvin / 100;
+    var red, green, blue;
+    if( temp <= 66 ){
+        red = 255;
+        green = temp;
+        green = 99.4708025861 * Math.log(green) - 161.1195681661;
+        if( temp <= 19){
+            blue = 0;
+        } else {
+            blue = temp-10;
+            blue = 138.5177312231 * Math.log(blue) - 305.0447927307;
+        }
+    } else {
+        red = temp - 60;
+        red = 329.698727446 * Math.pow(red, -0.1332047592);
+        green = temp - 60;
+        green = 288.1221695283 * Math.pow(green, -0.0755148492 );
+        blue = 255;
+    }
+    red = Math.round(red); green = Math.round(green); blue = Math.round(blue);
+    return {
+        r : red,
+        g : green,
+        b : blue
+    }
+}
+
+function ctToHex(ct) {
+  ctMin = 153;
+  ctMax = 500;
+
+  kelvinMin = 6500;
+  kelvinMax = 2000;
+
+  value = (ct - ctMin) / (ctMax - ctMin);
+  value = Math.round((value * (kelvinMax-kelvinMin)) + kelvinMin);
+
+  console.log(value);
+
+  console.log(kelvinToRgb(value).r);
+
+  console.log(kelvinToRgb(value).g);
+  console.log(kelvinToRgb(value).b);
+
+  rgb = kelvinToRgb(value);
+
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
+}
+
 function lightOrDark(color) {
+
+  if (color === undefined) {
+    return 'light';
+  }
 
   color = +("0x" + color.replace(
   color.length < 5 && /./g, '$&$&'));

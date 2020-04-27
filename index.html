@@ -88,6 +88,23 @@
       </footer>
     </div>
   </div>
+
+  <div id="kelvin-picker-modal" class="modal">
+    <div class="modal-background" onclick="$('#kelvin-picker-modal').hide();"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Choose white balance</p>
+        <button class="delete" aria-label="close" onclick="$('#kelvin-picker-modal').hide();"></button>
+      </header>
+      <div class="modal-card-body">
+        <div id="kelvin-picker"></div>
+      </div>
+      <footer class="modal-card-foot">
+        <button class="button is-fullwidth is-large" onclick="$('#kelvin-picker-modal').hide();">Close</button>
+      </footer>
+    </div>
+  </div>
+
   <script>
 if (parseInt(getCookie("transition")) > -1) {
   var settingTransitionTime = parseInt(getCookie("transition"));
@@ -109,7 +126,7 @@ var colorPicker = new iro.ColorPicker("#color-picker", {
   width: colorPickerWidth,
   color: "rgb(255, 0, 0)",
   borderWidth: 1,
-  borderColor: "#fff",
+  borderColor: "#fff"
 });
 
 colorPicker.on(["input:end"], function(color){
@@ -127,28 +144,70 @@ colorPicker.on(["input:end"], function(color){
   setLight(pickColorIds, bri, color.hexString.substring(1));  
 });
 
+var kelvinPicker = new iro.ColorPicker("#kelvin-picker", {
+  layout: [
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: 'kelvin',
+        sliderShape: 'circle',
+        layoutDirection: 'horizontal'
+      }
+    }
+  ],
+  width: colorPickerWidth,
+  borderWidth: 1,
+  borderColor: "#fff",
+});
+
+kelvinPicker.on(["input:end"], function(color){
+  if(getCookie("debug") == "1") { console.log("hex: " + color.hexString); }
+  if(getCookie("debug") == "1") { console.log("kelvin: " + color.kelvin); }
+  if(getCookie("debug") == "1") { console.log(pickColorIds); }
+  if (pickColorMode == "light") {
+    bri = document.getElementById("bri-slider-" + pickColorIds).value;
+    pickColorIds = [pickColorIds];
+  } else if (pickColorMode == "group") {
+    bri = document.getElementById("bri-groupslider-" + pickGroupId).value;
+  }
+  if(getCookie("debug") == "1") { console.log(bri); }
+  setLightKelvin(pickColorIds, bri, color.kelvin);
+});
+
+
 var pickColorIds;
 var pickColorMode;
 var pickGroupId;
+var pickColorType;
 
-function pickColor(mode, id, currentcolor, groupid) {
-  colorPicker.color.hexString = currentcolor;
+function pickColor(mode, type, id, currentcolor, groupid) {
+
   pickColorIds = id;
   pickColorMode = mode;
+  pickColorType = type;
   pickGroupId = groupid;
 
-  $("#color-picker-modal").show();
+  if (type == "rgb") {
+    colorPicker.color.hexString = currentcolor;
+    $("#color-picker-modal").show();
+  }
+  if (type == "kelvin") {
+    if ((currentcolor > 152) && (currentcolor < 501)) {
+      currentcolor = ctToPickerKelvin(currentcolor);
+      kelvinPicker.color.kelvin = currentcolor;
+    } else {
+      kelvinPicker.color.hexString = currentcolor;
+    }
+    $("#kelvin-picker-modal").show();  
+  }
 }
-
-
-
 
     setInterval(function() {
       if (mouseDown == 0) {
-//        hueLightsGet();
-//        hueGroupsGet();
+        hueLightsGet();
+        hueGroupsGet();
       }
-    }, 10000);
+    }, 5000);
     hueLightsGet();
     hueGroupsGet();
 
@@ -160,6 +219,7 @@ function pickColor(mode, id, currentcolor, groupid) {
         if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].state.colormode == "ct") {
+          hexcolor = ctToHex(data[key].state.ct);
           if(getCookie("debug") == "1") { console.log("bri: " + data[key].state.bri + ", ct: " + data[key].state.ct); }
         } else if (data[key].state.colormode == "hs") {
           if(getCookie("debug") == "1") { console.log("bri: " + data[key].state.bri + ", hue: " + data[key].state.hue + ", sat: " + data[key].state.sat); }
@@ -191,14 +251,15 @@ function pickColor(mode, id, currentcolor, groupid) {
 
         html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight "+hueStateClass+"' id='huelight-" + key + "'>";
         html += data[key].name;
-//        html += "<input style='display: none;' id='huelight-"+key+"-input' class=\x22jscolor {width:100vw, height:150, position:'right'}\x22 onchange='setLight([" + key + "], " + data[key].state.bri + ", this.jscolor)' value='" + hexcolor + "'>";
-//        html += "<button class=\x22jscolor {valueElement: \x27huelight-"+key+"-input\x27}\x22>Pick a color</button>";
-//        html+= "<span onclick=\x22document.getElementById('huelight-"+key+"-input').jscolor.show();\x22>set_color</span>";
-//        html += "<span onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22>pick_color</span>";
 
         if (data[key].state.on == true) {
           html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('light', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          if (data[key].state.colormode == "ct") {
+            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '"+data[key].state.ct+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          } else {
+            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          }
         } else {
           html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
@@ -211,7 +272,6 @@ function pickColor(mode, id, currentcolor, groupid) {
         }
       });
       $("#hue #lights").html(html);
-//      jscolor.installByClassName("jscolor");
     }
 
 
@@ -226,6 +286,7 @@ function pickColor(mode, id, currentcolor, groupid) {
         if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].action.colormode == "ct") {
+          hexcolor = ctToHex(data[key].action.ct);
           if(getCookie("debug") == "1") { console.log("bri: " + data[key].action.bri + ", ct: " + data[key].action.ct); }
         } else if (data[key].action.colormode == "hs") {
           if(getCookie("debug") == "1") { console.log("bri: " + data[key].action.bri + ", hue: " + data[key].action.hue + ", sat: " + data[key].action.sat); }
@@ -257,11 +318,14 @@ function pickColor(mode, id, currentcolor, groupid) {
 
         html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup "+hueStateClass+"' id='huegroup-" + key + "'>";
         html += data[key].name;
-//        html += "<input class='jscolor' onchange='setLight([" + data[key].lights + "], " + data[key].action.bri + ", this.jscolor)' value='" + hexcolor + "'>";
-//        html += "<span onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22>pick_color</span>";
         if (data[key].action.on == true) {
           html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('group', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          if (data[key].action.colormode == "ct") {
+            html += "<button onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '"+data[key].action.ct+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          } else {
+            html += "<button onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          }
         } else {
           html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
@@ -273,21 +337,23 @@ function pickColor(mode, id, currentcolor, groupid) {
         }
       });
       $("#hue #groups").html(html);
-//      jscolor.installByClassName("jscolor");
     }
 
 
 
 
     function setLight(lightid, bri, color) {
-/////////      for (var i = 0; i < lightid.length; i++) {
         if(getCookie("debug") == "1") { console.log(lightid + " " + color); }
         if(getCookie("debug") == "1") { console.log("bri: " + bri); }
         if(getCookie("debug") == "1") { console.log(hexToHs(color)); }
         var hue = hexToHs(color).h;
         var sat = hexToHs(color).s;
         hueLightSetColor(lightid, true, bri, hue, sat, settingTransitionTime);
-///////      }
+    }
+
+    function setLightKelvin(lightid, bri, kelvin) {
+      var ct = kelvinToCt(kelvin);
+      hueLightSetWhite(lightid, true, bri, ct, settingTransitionTime)
     }
 
     function setBrightness(lightid, bri) {
