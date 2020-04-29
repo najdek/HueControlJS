@@ -97,7 +97,7 @@
         <button class="delete" aria-label="close" onclick="$('#kelvin-picker-modal').hide();"></button>
       </header>
       <div class="modal-card-body">
-        <div id="kelvin-picker"></div>
+        <div id="kelvin-picker" style="text-align: center;"></div>
       </div>
       <footer class="modal-card-foot">
         <button class="button is-fullwidth is-large" onclick="$('#kelvin-picker-modal').hide();">Close</button>
@@ -125,8 +125,8 @@ var colorPicker = new iro.ColorPicker("#color-picker", {
   // Option guide: https://iro.js.org/guide.html#color-picker-options
   width: colorPickerWidth,
   color: "rgb(255, 0, 0)",
-  borderWidth: 1,
-  borderColor: "#fff"
+  borderWidth: 3,
+  borderColor: "#333"
 });
 
 colorPicker.on(["input:end"], function(color){
@@ -156,8 +156,8 @@ var kelvinPicker = new iro.ColorPicker("#kelvin-picker", {
     }
   ],
   width: colorPickerWidth,
-  borderWidth: 1,
-  borderColor: "#fff",
+  borderWidth: 3,
+  borderColor: "#333"
 });
 
 kelvinPicker.on(["input:end"], function(color){

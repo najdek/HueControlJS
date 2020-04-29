@@ -14,7 +14,7 @@ bulma.css
 icons/favicon.ico
 
 SETTINGS:
-prefer-online
+fast
 
 FALLBACK:
 / /offline.html
