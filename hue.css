@@ -107,11 +107,13 @@ footer.footer a:hover {
 #hue #groups, #hue #lights {
   padding: 0px 10px;
 }
-.huegroup button, .huelight button {
+.huegroup .hue-button, .huelight .hue-button {
   border-width: 0;
   background-color: #00000000 !important;
+  text-align: center;
+  line-height: 100px;
 }
-.huegroup button:hover .icon svg, .huelight button:hover .icon svg {
+.huegroup .hue-button:hover .icon svg, .huelight .hue-button:hover .icon svg {
   color: #888888 !important;
 }
 .huegroup, .huelight {
@@ -120,10 +122,10 @@ footer.footer a:hover {
 .huegroup.turned-off, .huelight.turned-off {
   border-radius: 20px;
 }
-.huegroup.turned-off button:first-of-type, .huelight.turned-off button:first-of-type {
+.huegroup.turned-off .hue-button:first-of-type, .huelight.turned-off .hue-button:first-of-type {
   border-radius: 0px 20px 20px 0px;
 }
-.huegroup button:first-of-type, .huelight button:first-of-type {
+.huegroup .hue-button:first-of-type, .huelight .hue-button:first-of-type {
   border-radius: 0px 20px 0px 0px;
 }
 .brightness-slider input {
