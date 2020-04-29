@@ -1,0 +1,84 @@
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+h1.title {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 16px;
+}
+p.subtitle {
+  display: none;
+}
+.section {
+  padding: 0;
+}
+
+#lights .huelight:first-of-type, #groups .huegroup:first-of-type {
+  margin-top: 0;
+}
+
+#lights .huelight, #groups .huegroup {
+  margin: 120px 0;
+  height: 160px !important;
+  text-align: center !important;
+  padding: 0;
+}
+.hue-buttons {
+  float: none !important;
+  display: block !important;
+  text-align: center;
+}
+
+.watch-only {
+  display: block !important;
+}
+.hide-on-watch {
+  display: none !important;
+}
+#lights .huelight button, #groups .huegroup button {
+  display: inline-block !important;
+  float:  none !important;
+  text-align: center;
+  background-radius: 10px !important;
+  color: #eeeeee !important;
+}
+
+.settings-button {
+  display: block !important;
+  position: relative !important;
+  text-align: center !important;
+}
+.hue-name {
+  display: block !important;
+  text-align: center !important;
+}
+.brightness-slider {
+ 
+}
+#color-picker, #kelvin-picker {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+}
+
+.IroWheel, .IroSlider {
+  overflow: none !important;
+}
+
+#color-picker-modal .modal-card-body, #kelvin-picker-modal .modal-card-body {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+#color-picker-modal .modal-card-foot, #kelvin-picker-modal .modal-card-foot {
+  display: none;
+}
+
+#hue #groups, #hue #lights {
+  padding: 0 40px;
+}

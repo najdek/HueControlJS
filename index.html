@@ -2,7 +2,7 @@
 <html manifest="/hue.appcache">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="height = device-height, width=device-width, initial-scale=0.85, maximum-scale=1, user-scalable = no">
+    <meta name="viewport" content="height = device-height, width=device-width, initial-scale=1, maximum-scale=1, user-scalable = no">
     <meta name="HandheldFriendly" content="True" />
     <meta name="mobile-web-app-capable" content="yes" />    
     <title>Hue Control</title>
@@ -25,6 +25,12 @@
     <script src="jquery-3.5.0.min.js"></script>
     <script src="hue.js"></script>
     <script src="iro.js"></script>
+    <script>
+      if(navigator.userAgent.indexOf('Tizen') >= 0){
+        $('head').append('<link rel="stylesheet" href="watch.css">');
+        var watchMode = 1;
+      }
+    </script>
   </head>
   <body>
   <section class="section">
@@ -120,6 +126,9 @@ if ($(window).width() < 600) {
   if(getCookie("debug") == "1") { console.log($(window).width()); }
   colorPickerWidth = 560;
 }
+if (watchMode == 1) {
+  colorPickerWidth = $(window).width();
+}
 
 var colorPicker = new iro.ColorPicker("#color-picker", {
   // Option guide: https://iro.js.org/guide.html#color-picker-options
@@ -141,7 +150,10 @@ colorPicker.on(["input:end"], function(color){
     bri = document.getElementById("bri-groupslider-" + pickGroupId).value;
   }
   if(getCookie("debug") == "1") { console.log(bri); }
-  setLight(pickColorIds, bri, color.hexString.substring(1));  
+  setLight(pickColorIds, bri, color.hexString.substring(1));
+  if (watchMode == 1) {
+    $("#color-picker-modal").hide();
+  }
 });
 
 var kelvinPicker = new iro.ColorPicker("#kelvin-picker", {
@@ -172,6 +184,9 @@ kelvinPicker.on(["input:end"], function(color){
   }
   if(getCookie("debug") == "1") { console.log(bri); }
   setLightKelvin(pickColorIds, bri, color.kelvin);
+  if (watchMode == 1) {
+    $("#kelvin-picker-modal").hide();
+  }
 });
 
 
@@ -252,26 +267,27 @@ function pickColor(mode, type, id, currentcolor, groupid) {
         }
 
         html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight "+hueStateClass+"' id='huelight-" + key + "'>";
-        html += data[key].name;
-
+        html += "<span class='hue-name'>" + data[key].name + "</span>";
+        html += "<div class='hue-buttons' style='display: flex; float: right;'>";
         if (data[key].state.on == true) {
-          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
           if (data[key].state.colormode == "ct") {
-            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '"+data[key].state.ct+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '"+data[key].state.ct+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+";' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
           } else {
-            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
+            html += "<button onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+";' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
           }
+          html += "<button onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+";' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+";' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
-          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+";' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
-
         html += "</div>";
+
         if (data[key].state.on == true) {
           html += "<div class='brightness-slider'><input type='range' id='bri-slider-"+key+"' value='"+data[key].state.bri+"' min='0' max='254' onchange='setBrightness(["+key+"], this);'></div>";
         } else {
           html += "<div class='brightness-slider-off'><input type='range' disabled='disabled' id='bri-slider-"+key+"' value='"+data[key].state.bri+"' min='0' max='254' onchange='setBrightness(["+key+"], this);'></div>";
         }
+        html += "</div>";
       });
       $("#hue #lights").html(html);
     }
@@ -319,15 +335,16 @@ function pickColor(mode, type, id, currentcolor, groupid) {
         }
 
         html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup "+hueStateClass+"' id='huegroup-" + key + "'>";
-        html += data[key].name;
+        html += "<span class='hue-name'>" + data[key].name + "</span>";
+        html += "<div class='hue-buttons' style='display: flex; float: right;'>";
         if (data[key].action.on == true) {
-          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
-          html += "<button onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
           if (data[key].action.colormode == "ct") {
             html += "<button onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '"+data[key].action.ct+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
           } else {
             html += "<button onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></button>";
           }
+          html += "<button onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></button>";
+          html += "<button id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></button>";
         } else {
           html += "<button id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 80px; height: 80px; background-color: "+hueLightBtnBgColor+"; display: flex; float: right;' class='button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></button>";
         }
@@ -337,6 +354,7 @@ function pickColor(mode, type, id, currentcolor, groupid) {
         } else {
           html += "<div class='brightness-slider-off'><input type='range' disabled='disabled' id='bri-groupslider-"+key+"' value='"+data[key].action.bri+"' min='0' max='254' onchange='setBrightness(["+data[key].lights+"], this);'></div>";
         }
+        html += "</div>";
       });
       $("#hue #groups").html(html);
     }
@@ -381,7 +399,6 @@ document.body.ontouchend = function() {
 document.body.ontouchcancel = function() {
     mouseDown = 0;
 }
-
 
   </script>
   </body>

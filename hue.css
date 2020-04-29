@@ -1,3 +1,13 @@
+.watch-only {
+  display: none;
+}
+.hide-on-watch {
+  display: block;
+}
+.brightness-slider {
+  line-height: 1;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -135,11 +145,19 @@ footer.footer a:hover {
   }
 }
 
+.hue-name {
+  padding-left: 40px;
+}
+
+#lights .huelight:first-of-type, #groups .huegroup:first-of-type {
+  margin-top: 0;
+}
+
 .huelight, .huegroup {
   height: 80px;
   line-height: 80px;
-  margin: 30px 0px 0px 0px;
-  padding: 0px 0px 0px 40px;
+  margin: 70px 0px;
+  padding: 0px;
   font-size: 20px;
   font-weight: bold;
 }
