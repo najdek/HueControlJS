@@ -44,7 +44,7 @@
       html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick='removeBridge();'>Remove saved bridge</button>";
       $("#main").html(html);
       setTimeout(function(){
-        window.location.href = "./";
+        window.location.href = "index.html";
       }, 1000);
     } else {
       getBridges();
@@ -75,7 +75,7 @@
             if (data[i].internalipaddress == getBridge("ip")) {
               $("#main").html("Bridge is already connected!");
               setTimeout(function(){
-                window.location.href = "./";
+                window.location.href = "index.html";
               }, 1000);
               return;
             } else {
@@ -141,7 +141,7 @@
       setCookie("bridge", ip + "|" + id + "|" + username);
       $("#main").html("Bridge connected!");
       setTimeout(function(){
-        window.location.href = "./";
+        window.location.href = "index.html";
       }, 3000);
 
     }
@@ -163,7 +163,7 @@
       saveBridge(ip, getBridge("id"), getBridge("username"));
       $("#main").html("Updated bridge ip address");
       setTimeout(function(){
-        window.location.href = "./";
+        window.location.href = "index.html";
       }, 1000);
 
     }
