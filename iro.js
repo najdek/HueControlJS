@@ -74,7 +74,21 @@
 
 
   function intToHex(int) {
-    return int.toString(16).padStart(2, '0');
+    int = int.toString(16);
+    //https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+    var targetLength = 2;
+    var padString = "0";
+    if (int.length > targetLength) {
+      return String(int);
+    } else {
+      targetLength = targetLength-int.length;
+      if (targetLength > padString.length) {
+        padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+      }
+      return padString.slice(0,targetLength) + String(int);
+    }
+    //return int.toString(16).padStart(2, '0');
   }
 
   var IroColor = function IroColor(value, onChange) {
