@@ -38,7 +38,24 @@
   </section>
 </body>
 <script>
-    getBridges();
+    if (getBridge("id") == "manual") {
+      var html = "";
+      html += "Manual mode: " + getBridge("ip") + "<br>";
+      html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick='removeBridge();'>Remove saved bridge</button>";
+      $("#main").html(html);
+      setTimeout(function(){
+        window.location.href = "./";
+      }, 1000);
+    } else {
+      getBridges();
+    }
+
+    function removeBridge() {
+      saveBridge("", "", "");
+      setTimeout(function(){
+        location.reload();
+      }, 500);
+    }
 
     function getBridges() {
       $.getJSON('https://discovery.meethue.com/')
@@ -67,13 +84,23 @@
             }
           }
 
-          html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick=\x22setupBridge('"+data[i].internalipaddress+"', '"+data[i].id+"');\x22>"+data[i].internalipaddress + " (" + data[i].id +")</button>";
+          html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick=\x22setupBridge('"+data[i].internalipaddress+"', '"+data[i].id+"');\x22>"+data[i].internalipaddress + " (" + data[i].id +")</button><br>";
+          html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick='manualSetup();'>Enter IP address manually</button>";
         }
         $("#main").html(html);
       })
       .fail(function() {
-        $("#main").html("Error connecting to meethue.com (bridge discovery)");
+        html += "Error connecting to meethue.com (bridge discovery)<br>";
+        html += "<button style='margin: 10px 0px' class='button is-large is-info' onclick='manualSetup();'>Enter IP address manually</button>";
+        $("#main").html(html);
       })
+    }
+
+    function manualSetup() {
+      ip = window.prompt("Enter IP address of bridge");
+      id = "manual";
+      $("#main").html("Connecting to bridge...");
+      setupBridge(ip, id);
     }
 
     function setupBridge(ip, id) {
