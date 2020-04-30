@@ -1,0 +1,11 @@
+<html>
+  <script src="js/jquery-3.5.0.min.js"></script>
+  <div style="background-color: white; width: 100%; height: 100%; text-align: center;">
+    <iframe src="index.html#watch" id="watch-simulator" style="height: 360px; width: 360px; border-radius: 180px; display: block; margin: auto;"></iframe>
+  </div>
+  <script>
+    if (window.location.hash) {
+      document.getElementById("watch-simulator").src = window.location.hash.substring(1) + "#watch";
+    }
+  </script>
+</html>

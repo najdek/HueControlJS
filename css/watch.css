@@ -28,6 +28,7 @@ p.subtitle {
   float: none !important;
   display: block !important;
   text-align: center;
+  height: 80px !important;
 }
 
 .watch-only {
@@ -36,12 +37,11 @@ p.subtitle {
 .hide-on-watch {
   display: none !important;
 }
-#lights .huelight button, #groups .huegroup button {
+#lights .huelight .hue-button, #groups .huegroup .hue-button {
   display: inline-block !important;
   float:  none !important;
   text-align: center;
   background-radius: 10px !important;
-  color: #eeeeee !important;
 }
 
 .settings-button {
@@ -52,6 +52,8 @@ p.subtitle {
 .hue-name {
   display: block !important;
   text-align: center !important;
+  padding-left: 0 !important;
+
 }
 .brightness-slider {
  
@@ -81,4 +83,33 @@ p.subtitle {
 
 #hue #groups, #hue #lights {
   padding: 0 40px;
+}
+
+.tabs.is-boxed li.is-active a {
+  background-color: #000000 !important;
+}
+
+.hue-settings-header {
+  text-align: center;
+}
+.hue-settings-header .back-button {
+  position: fixed;
+  top: 50%;
+  left: 5px;
+  padding-top: 50vh;
+  transform: translateY(-50%);
+  display: block;
+  height: 100vh;
+  z-index: 1000;
+}
+.hue-settings-header .back-button .icon {
+  transform: translateY(-50%);
+}
+.hue-settings-body {
+  text-align: center;
+  margin-top: 30px;
+}
+.hue-settings-footer {
+  background-color: black;
+  padding: 36px 24px;
 }

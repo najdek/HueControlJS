@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="/hue.appcache">
+<html manifest="hue.appcache">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height = device-height, width=device-width, initial-scale=1, maximum-scale=1, user-scalable = no">
@@ -7,27 +7,28 @@
     <meta name="mobile-web-app-capable" content="yes" />    
     <title>Hue Control</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-    <link rel="manifest" href="/icons/site.webmanifest">
-    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#1e1e1e">
-    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="manifest" href="icons/site.webmanifest">
+    <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#1e1e1e">
+    <link rel="shortcut icon" href="icons/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Hue Control">
     <meta name="application-name" content="Hue Control">
     <meta name="msapplication-TileColor" content="#1e1e1e">
-    <meta name="msapplication-config" content="/icons/browserconfig.xml">
+    <meta name="msapplication-config" content="icons/browserconfig.xml">
     <meta name="theme-color" content="#1e1e1e">
 
-    <link rel="stylesheet" href="bulma.css">
-    <link rel="stylesheet" href="hue.css">
-    <script defer src="fontawesome.js"></script>
-    <script src="jquery-3.5.0.min.js"></script>
-    <script src="hue.js"></script>
-    <script src="iro.js"></script>
+    <link rel="stylesheet" href="css/bulma.css">
+    <link rel="stylesheet" href="css/hue.css">
+    <script defer src="js/fontawesome.js"></script>
+    <script src="js/jquery-3.5.0.min.js"></script>
+    <script src="js/hue.js"></script>
+    <script src="js/iro.js"></script>
     <script>
-      if(navigator.userAgent.indexOf('Tizen') >= 0){
-        $('head').append('<link rel="stylesheet" href="watch.css">');
+      if((navigator.userAgent.indexOf('Tizen') >= 0) || (window.location.hash == "#watch")){
+        $('head').append('<link rel="stylesheet" href="css/watch.css">');
+        $.getScript("js/watch.js");
         var watchMode = 1;
       }
     </script>
