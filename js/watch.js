@@ -1,14 +1,19 @@
 
-window.onload = function () {
-    // add eventListener for tizenhwkey
-    document.addEventListener('tizenhwkey', function(e) {
-        if(e.keyName == "back")
-	try {
-	    tizen.application.getCurrentApplication().exit();
-	} catch (ignore) {
-	}
-    });
-};
+// add eventListener for tizenhwkey
+document.addEventListener('tizenhwkey', function(e) {
+  if (e.keyName == "back") {
+    tizenBackButton();
+  }
+});
+
+
+function tizenBackButton() {
+  if ($(".modal").is(":visible")) {
+    $(".modal").hide();
+  } else {
+    try { tizen.application.getCurrentApplication().exit(); } catch (ignore) {}
+  }
+}
 
 
 var SCROLL_STEP = 200;
@@ -16,7 +21,6 @@ var SCROLL_TIME = 150;
 
 document.addEventListener('rotarydetent', function(ev) {
     var direction = ev.detail.direction;
-
     if (direction == 'CW') {
         //window.scrollBy(0,SCROLL_STEP);
     	scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
@@ -24,10 +28,6 @@ document.addEventListener('rotarydetent', function(ev) {
     	scrollByAnimated(-SCROLL_STEP, SCROLL_TIME);
     }
 });
-
-
-
-
 
 
 scrollByAnimated = function(scrollY, duration){

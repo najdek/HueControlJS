@@ -152,9 +152,6 @@ colorPicker.on(["input:end"], function(color){
   }
   if(getCookie("debug") == "1") { console.log(bri); }
   setLight(pickColorIds, bri, color.hexString.substring(1));
-  if (watchMode == 1) {
-    $("#color-picker-modal").hide();
-  }
 });
 
 var kelvinPicker = new iro.ColorPicker("#kelvin-picker", {
@@ -185,9 +182,6 @@ kelvinPicker.on(["input:end"], function(color){
   }
   if(getCookie("debug") == "1") { console.log(bri); }
   setLightKelvin(pickColorIds, bri, color.kelvin);
-  if (watchMode == 1) {
-    $("#kelvin-picker-modal").hide();
-  }
 });
 
 
