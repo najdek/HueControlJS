@@ -79,8 +79,10 @@ function hueLightSetBrightness(lightid, bri, transitiontime) {
         datatype: "html",
         success: function(data) {
             if(getCookie("debug") == "1") { console.log(data); }
-            hueLightsGet();
-            hueGroupsGet();
+            if (watchMode !== 1) {
+              hueLightsGet();
+              hueGroupsGet();
+            }
         },
         error: function() {
             window.location.href = "setup.html";

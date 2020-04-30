@@ -1,5 +1,9 @@
 function tizenBackButton() {
   if ($(".modal").is(":visible")) {
+    if ($("#brightness-picker-modal").is(":visible")) {
+      hueLightsGet();
+      hueGroupsGet();
+    }
     $(".modal").hide();
   } else {
     try { tizen.application.getCurrentApplication().exit(); } catch (ignore) {}
