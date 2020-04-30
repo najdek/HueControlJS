@@ -1,12 +1,3 @@
-
-// add eventListener for tizenhwkey
-document.addEventListener('tizenhwkey', function(e) {
-  if (e.keyName == "back") {
-    tizenBackButton();
-  }
-});
-
-
 function tizenBackButton() {
   if ($(".modal").is(":visible")) {
     $(".modal").hide();
@@ -19,12 +10,53 @@ function tizenBackButton() {
 var SCROLL_STEP = 200;
 var SCROLL_TIME = 150;
 
+function tizenRotate(direction) {
+  if ($(".modal").is(":visible")) {
+
+  } else {
+    if (direction == "cw") {
+      scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
+    } else if (direction == "ccw") {
+      scrollByAnimated(-SCROLL_STEP, SCROLL_TIME);
+    }
+  }
+}
+
+
+// simulate tizen events
+if (window.location.hash = "#watch") {
+  document.onkeydown = function (e) {
+    switch (e.key) {
+        case 'Backspace':
+            tizenBackButton();
+            break;
+        case 'ArrowLeft':
+            tizenRotate("ccw");
+            break;
+        case 'ArrowRight':
+            tizenRotate("cw");
+    }
+  };
+}
+
+
+
+// add eventListener for tizenhwkey
+document.addEventListener('tizenhwkey', function(e) {
+  if (e.keyName == "back") {
+    tizenBackButton();
+  }
+});
+
+
 document.addEventListener('rotarydetent', function(ev) {
     var direction = ev.detail.direction;
     if (direction == 'CW') {
         //window.scrollBy(0,SCROLL_STEP);
+        tizenRotate("cw");
     	scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
     } else if (direction == 'CCW') {
+        tizenRotate("ccw");
     	scrollByAnimated(-SCROLL_STEP, SCROLL_TIME);
     }
 });
