@@ -11,7 +11,7 @@ window.onload = function () {
 };
 
 
-var SCROLL_STEP = 100;
+var SCROLL_STEP = 200;
 var SCROLL_TIME = 150;
 
 document.addEventListener('rotarydetent', function(ev) {

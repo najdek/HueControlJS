@@ -113,3 +113,6 @@ p.subtitle {
   background-color: black;
   padding: 36px 24px;
 }
+.hue-setup-body #main {
+  font-size: 16px !important;
+}

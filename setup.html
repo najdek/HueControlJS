@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="height = device-height, width=device-width, initial-scale=0.85, maximum-scale=1, user-scalable = no">
+    <meta name="viewport" content="height = device-height, width=device-width, initial-scale=1, maximum-scale=1, user-scalable = no">
     <meta name="HandheldFriendly" content="True" />
     <meta name="theme-color" content="#1e1e1e">
     <meta name="mobile-web-app-capable" content="no" />
@@ -71,6 +71,11 @@
         html = "";
         if (data.length == 0) {
           html += "No Philips Hue bridges found in your network.";
+          setTimeout(function(){
+            getBridges();
+          }, 3000);
+          $("#main").html(html);
+          return;
         } else if (data.length == 1) {
           html += "Found one Philips Hue bridge in your network:<br>";
         } else {
