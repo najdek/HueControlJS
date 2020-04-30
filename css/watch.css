@@ -128,7 +128,7 @@ p.subtitle {
 .hue-setup-body #main {
   font-size: 16px !important;
 }
-.brightness-slider {
+.brightness-slider, .brightness-slider-off {
   display: none;
 }
 

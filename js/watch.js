@@ -87,10 +87,8 @@ document.addEventListener('rotarydetent', function(ev) {
     if (direction == 'CW') {
         //window.scrollBy(0,SCROLL_STEP);
         tizenRotate("cw");
-    	scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
     } else if (direction == 'CCW') {
         tizenRotate("ccw");
-    	scrollByAnimated(-SCROLL_STEP, SCROLL_TIME);
     }
 });
 
