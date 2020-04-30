@@ -21,10 +21,12 @@
 
     <link rel="stylesheet" href="css/bulma.css">
     <link rel="stylesheet" href="css/hue.css">
+    <link rel="stylesheet" href="css/loading-bar.css"/>
     <script defer src="js/fontawesome.js"></script>
     <script src="js/jquery-3.5.0.min.js"></script>
     <script src="js/hue.js"></script>
     <script src="js/iro.js"></script>
+    <script src="js/loading-bar.js"></script>
     <script>
       if((navigator.userAgent.indexOf('Tizen') >= 0) || (window.location.hash == "#watch")){
         $('head').append('<link rel="stylesheet" href="css/watch.css">');
@@ -111,6 +113,29 @@
       </footer>
     </div>
   </div>
+
+  <div id="brightness-picker-modal" class="modal">
+    <div class="modal-background" onclick="$('#brightness-picker-modal').hide();"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Choose brightness</p>
+        <button class="delete" aria-label="close" onclick="$('#brightness-picker-modal').hide();"></button>
+      </header>
+      <div class="modal-card-body">
+        <div id="brightness-picker" style="text-align: center;">
+
+
+<div class="brightness-picker-bar label-center">
+</div>
+
+        </div>
+      </div>
+      <footer class="modal-card-foot">
+        <button class="button is-fullwidth is-large" onclick="$('#brightness-picker-modal').hide();">Close</button>
+      </footer>
+    </div>
+  </div>
+
 
   <script>
 if (parseInt(getCookie("transition")) > -1) {
@@ -212,6 +237,27 @@ function pickColor(mode, type, id, currentcolor, groupid) {
   }
 }
 
+  var brightnessPickerBar = new ldBar(".brightness-picker-bar", {
+   "stroke": '#66f',
+   "stroke-width": 6,
+   "preset": "circle",
+   "stroke-trail-width": 0,
+   "value": 50
+  });
+
+function pickBrightness(mode, id, currentbrightness, groupid) {
+  pickColorMode = mode;
+  pickColorIds = id;
+  pickGroupId = groupid;
+
+  currentbrightness = Math.round(currentbrightness / 2.54);
+
+//  #brightness-picker .ldBar  data-value
+  brightnessPickerBar.set(currentbrightness, false);
+  $("#brightness-picker-modal").show();
+}
+
+
     setInterval(function() {
       if(getCookie("debug") !== "1") {
         if (mouseDown == 0) {
@@ -271,8 +317,15 @@ function pickColor(mode, type, id, currentcolor, groupid) {
             html += "<div onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           }
           html += "<div onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          if (watchMode == 1) {
+            html += "<div onclick=\x22pickBrightness('light', "+key+", "+data[key].state.bri+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<br>";
+          }
           html += "<div id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
         } else {
+          if (watchMode == 1) {
+            html += "<span style='color: #666; font-size: 24px;'>TURNED OFF</span><br>";
+          }
           html += "<div id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
         }
         html += "</div>";
@@ -339,8 +392,15 @@ function pickColor(mode, type, id, currentcolor, groupid) {
             html += "<div onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           }
           html += "<div onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          if (watchMode == 1) {
+            html += "<div onclick=\x22pickBrightness('group', ["+data[key].lights+"], "+data[key].action.bri+", "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<br>";
+          }
           html += "<div id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
         } else {
+          if (watchMode == 1) {
+            html += "<span style='color: #666; font-size: 24px;'>TURNED OFF</span><br>";
+          }
           html += "<div id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
         }
         html += "</div>";

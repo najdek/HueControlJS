@@ -12,7 +12,40 @@ var SCROLL_TIME = 150;
 
 function tizenRotate(direction) {
   if ($(".modal").is(":visible")) {
+    if ($("#brightness-picker-modal").is(":visible")) {
+//        setBrightness(pickColorIds, bri
 
+      if (direction == "cw") {
+        if (brightnessPickerBar.value > 95) {
+          brightnessPickerBar.value = 95;
+        } else if (brightnessPickerBar.value == 1) {
+          brightnessPickerBar.value = 0;
+        }
+
+        newBrightness = (brightnessPickerBar.value + 5) * 2.54;
+        brightnessPickerBar.set(brightnessPickerBar.value + 5, false);
+      } else if (direction == "ccw") {
+        if (brightnessPickerBar.value < 6) {
+          brightnessPickerBar.value = 6;
+        }
+        newBrightness = (brightnessPickerBar.value - 5) * 2.54;
+        brightnessPickerBar.set(brightnessPickerBar.value - 5, false);
+      }
+
+      newBrightness = Math.round(newBrightness);
+
+      console.log(newBrightness);
+
+      if (pickColorMode == "light") {
+        pickColorIds = [pickColorIds];
+      }
+
+      hueLightSetBrightness(pickColorIds, newBrightness, settingTransitionTime);
+//      setBrightness(pickColorIds, newBrightness);
+
+    }
+//pickColorIds
+//brightnessPickerBar.value
   } else {
     if (direction == "cw") {
       scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
@@ -139,3 +172,4 @@ scrollByAnimated = function(scrollY, duration){
 	  /*start animation*/  
 	  step();
 };
+

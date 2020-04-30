@@ -23,10 +23,14 @@ p.subtitle {
 }
 
 #lights .huelight, #groups .huegroup {
-  margin: 120px 0;
-  height: 160px !important;
+  margin: 100px 0;
+  height: 210px !important;
   text-align: center !important;
-  padding: 0;
+  padding: 10px 0 0 0;
+  border-radius: 100px;
+}
+.hue-name {
+  line-height: 40px !important;
 }
 .hue-buttons {
   float: none !important;
@@ -46,6 +50,7 @@ p.subtitle {
   float:  none !important;
   text-align: center;
   background-radius: 10px !important;
+  position: relative;
 }
 
 .settings-button {
@@ -62,7 +67,7 @@ p.subtitle {
 .brightness-slider {
  
 }
-#color-picker, #kelvin-picker {
+#color-picker, #kelvin-picker, #brightness-picker {
   position: fixed;
   height: 100%;
   width: 100%;
@@ -75,18 +80,21 @@ p.subtitle {
   overflow: none !important;
 }
 
-#color-picker-modal .modal-card-body, #kelvin-picker-modal .modal-card-body {
+#color-picker-modal .modal-card-body, #kelvin-picker-modal .modal-card-body, #brightness-picker-modal .modal-card-body {
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #000000;
 }
 
-#color-picker-modal .modal-card-foot, #kelvin-picker-modal .modal-card-foot {
+#color-picker-modal .modal-card-foot, #kelvin-picker-modal .modal-card-foot, #brightness-picker-modal .modal-card-foot {
   display: none;
 }
 
 #hue #groups, #hue #lights {
-  padding: 0 40px;
+  padding: 0 30px;
 }
 
 .tabs.is-boxed li.is-active a {
@@ -119,4 +127,18 @@ p.subtitle {
 }
 .hue-setup-body #main {
   font-size: 16px !important;
+}
+.brightness-slider {
+  display: none;
+}
+
+#brightness-picker .ldBar {
+  height: 116% !important;
+  width: 116% !important;
+  left: -8%;
+  top: -8%;
+}
+
+#brightness-picker .ldBar-label {
+  font-size: 60px;
 }
