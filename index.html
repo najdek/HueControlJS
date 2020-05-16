@@ -54,7 +54,7 @@
           <li class="is-active">
             <a onclick="$('.hue-tabs li').removeClass('is-active');$(this).parent().addClass('is-active'); $('#hue .lights-container').hide(); $('#hue .groups-container').show();">
               <span class="icon"><i class="fas fa-cubes" aria-hidden="true"></i></span>
-              <span>Rooms</span>
+              <span>Groups</span>
             </a>
           </li>
           <li>
@@ -245,15 +245,16 @@ function pickColor(mode, type, id, currentcolor, groupid) {
    "value": 50
   });
 
-function pickBrightness(mode, id, currentbrightness, groupid) {
+function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
   pickColorMode = mode;
   pickColorIds = id;
   pickGroupId = groupid;
 
   currentbrightness = Math.round(currentbrightness / 2.54);
 
-//  #brightness-picker .ldBar  data-value
   brightnessPickerBar.set(currentbrightness, false);
+  $("#brightness-picker svg .mainline").css("stroke", currentcolor);
+
   $("#brightness-picker-modal").show();
 }
 
@@ -318,7 +319,7 @@ function pickBrightness(mode, id, currentbrightness, groupid) {
           }
           html += "<div onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
           if (watchMode == 1) {
-            html += "<div onclick=\x22pickBrightness('light', "+key+", "+data[key].state.bri+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickBrightness('light', "+key+", "+data[key].state.bri+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
             html += "<br>";
           }
           html += "<div id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
@@ -346,7 +347,7 @@ function pickBrightness(mode, id, currentbrightness, groupid) {
       if(getCookie("debug") == "1") { console.log(data.length); }
       var html = "";
       Object.keys(data).forEach(function(key,index) {
-        if (data[key].type !== "Room") {
+        if ((data[key].type !== "Room") && (data[key].type !== "Zone")) {
           return;
         }
         if(getCookie("debug") == "1") { console.log(data[key]); }
@@ -393,7 +394,7 @@ function pickBrightness(mode, id, currentbrightness, groupid) {
           }
           html += "<div onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
           if (watchMode == 1) {
-            html += "<div onclick=\x22pickBrightness('group', ["+data[key].lights+"], "+data[key].action.bri+", "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickBrightness('group', ["+data[key].lights+"], "+data[key].action.bri+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
             html += "<br>";
           }
           html += "<div id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
