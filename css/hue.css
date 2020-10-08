@@ -24,7 +24,6 @@
 html, body {
   background-color: #1e1e1e;
   color: #dddddd;
-  overflow-y: auto;
   -webkit-tap-highlight-color: #00000000;
 }
 .title {
@@ -112,6 +111,8 @@ footer.footer a:hover {
   background-color: #00000000 !important;
   text-align: center;
   line-height: 100px;
+  height: 80px;
+  width: 80px;
 }
 .huegroup .hue-button:hover .icon svg, .huelight .hue-button:hover .icon svg {
   color: #888888 !important;
@@ -162,6 +163,10 @@ footer.footer a:hover {
   padding: 0px;
   font-size: 20px;
   font-weight: bold;
+}
+
+.hue-tabs {
+  margin-top: 20px;
 }
 
 /* The slider itself */

@@ -1,3 +1,9 @@
+var briDelay;
+function brightnessRotateDelay(pickColorIds, newBrightness, settingTransitionTime) {
+  clearTimeout(briDelay);
+  briDelay = setTimeout(function(){ hueLightSetBrightness(pickColorIds, newBrightness, settingTransitionTime); }, 300);
+}
+
 function tizenBackButton() {
   if ($(".modal").is(":visible")) {
     if ($("#brightness-picker-modal").is(":visible")) {
@@ -5,8 +11,10 @@ function tizenBackButton() {
       hueGroupsGet();
     }
     $(".modal").hide();
-  } else {
+  } else if ($(".hue-tabs").is(":visible")) {
     try { tizen.application.getCurrentApplication().exit(); } catch (ignore) {}
+  } else {
+    $(".hue-tabs").show();
   }
 }
 
@@ -43,13 +51,19 @@ function tizenRotate(direction) {
       if (pickColorMode == "light") {
         pickColorIds = [pickColorIds];
       }
-
-      hueLightSetBrightness(pickColorIds, newBrightness, settingTransitionTime);
+      brightnessRotateDelay(pickColorIds, newBrightness, settingTransitionTime);
+//      hueLightSetBrightness(pickColorIds, newBrightness, settingTransitionTime);
 //      setBrightness(pickColorIds, newBrightness);
 
     }
 //pickColorIds
 //brightnessPickerBar.value
+  } else if (currentScrollType == "light" || currentScrollType == "group") {
+    if (direction == "cw") {
+      scrollBy(1);
+    } else if (direction == "ccw") {
+      scrollBy(-1);
+    }
   } else {
     if (direction == "cw") {
       scrollByAnimated(SCROLL_STEP, SCROLL_TIME);
@@ -174,4 +188,42 @@ scrollByAnimated = function(scrollY, duration){
 	  /*start animation*/  
 	  step();
 };
+
+//$(".hue-tabs").removeClass("tabs");
+
+var currentScrollType = "none";
+var currentScrollN = 0;
+function scrollToElement(type, n) {
+  currentScrollType = type;
+  currentScrollN = n;
+  $([document.documentElement, document.body]).animate({
+    scrollTop: $(".hue" + type + "-n" + n).offset().top
+  }, 200);
+  console.log(currentScrollType + ", " + currentScrollN);
+}
+
+function scrollBy(n) {
+  if ( $(".hue" + currentScrollType + "-n" + (currentScrollN + n)).length ) {
+    scrollToElement(currentScrollType, currentScrollN + n);
+  }
+}
+
+function watchGroupsBtn() {
+  console.log("groups");
+  $('#hue .lights-container').hide();
+  $('#hue .groups-container').show();
+  $(".hue-tabs").hide();
+  scrollToElement("group", 1);
+}
+function watchLightsBtn() {
+  console.log("lights");
+  $('#hue .groups-container').hide();
+  $('#hue .lights-container').show();
+  $(".hue-tabs").hide();
+  scrollToElement("light", 1);
+}
+
+$(".hue-tabs").html("<div><p style='text-align: center; margin: 30px 0px 20px 0px; color: #aaa;'>Hue Control</p><a id='watch-groups-btn'><span class='icon'><i class='fas fa-cubes' aria-hidden='true'></i></span><span>Groups</span></a><br><a id='watch-lights-btn'><span class='icon'><i class='fas fa-lightbulb' aria-hidden='true'></i></span><span>Lights</span></a></div>");
+document.getElementById("watch-groups-btn").addEventListener("click", watchGroupsBtn);
+document.getElementById("watch-lights-btn").addEventListener("click", watchLightsBtn);
 

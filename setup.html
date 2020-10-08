@@ -85,10 +85,8 @@
           if(getCookie("debug") == "1") { console.log(data[i]); }
           if (data[i].id == getBridge("id")) {
             if (data[i].internalipaddress == getBridge("ip")) {
-              $("#main").html("Bridge is already connected!");
-              setTimeout(function(){
-                window.location.href = "index.html";
-              }, 1000);
+              $("#main").html("Bridge connected!");
+              window.location.href = "index.html";
               return;
             } else {
               updateIp(data[i].internalipaddress);

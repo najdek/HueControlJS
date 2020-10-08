@@ -36,16 +36,6 @@
     </script>
   </head>
   <body>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hue Control
-      </h1>
-      <p class="subtitle">
-        Simple web app to control <strong>Philips Hue</strong>!
-      </p>
-    </div>
-  </section>
   <section>
     <div class="container">
 
@@ -78,7 +68,7 @@
     </div>
   </section>
 
-  <a class="settings-button" href="settings.html" style="position: fixed; top: 0; right: 0;">
+  <a class="settings-button" href="settings.html" style="display: block; text-align: center;">
     <button class="button" style="width: 80px; height: 80px; background-color: #00000000; border: 0;"><span class="icon is-large"><i class="fas fa-2x fa-cog"></i></span></button>
   </a>
 
@@ -123,7 +113,7 @@
       </header>
       <div class="modal-card-body">
         <div id="brightness-picker" style="text-align: center;">
-
+<div class="item-name"></div>
 
 <div class="brightness-picker-bar label-center">
 </div>
@@ -245,7 +235,7 @@ function pickColor(mode, type, id, currentcolor, groupid) {
    "value": 50
   });
 
-function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
+function pickBrightness(mode, id, currentbrightness, currentcolor, name, groupid) {
   pickColorMode = mode;
   pickColorIds = id;
   pickGroupId = groupid;
@@ -254,7 +244,7 @@ function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
 
   brightnessPickerBar.set(currentbrightness, false);
   $("#brightness-picker svg .mainline").css("stroke", currentcolor);
-
+  $("#brightness-picker .item-name").text(name);
   $("#brightness-picker-modal").show();
 }
 
@@ -273,8 +263,10 @@ function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
     function hueLightsLoad(data) {
       if(getCookie("debug") == "1") { console.log(data); }
       if(getCookie("debug") == "1") { console.log(data.length); }
+      var lightsCounter = 0;
       var html = "";
       Object.keys(data).forEach(function(key,index) {
+        lightsCounter = lightsCounter + 1;
         if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].state.colormode == "ct") {
@@ -308,26 +300,26 @@ function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
           var hueStateClass = "turned-off";
         }
 
-        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight "+hueStateClass+"' id='huelight-" + key + "'>";
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huelight huelight-n"+lightsCounter+" "+hueStateClass+"' id='huelight-" + key + "'>";
         html += "<span class='hue-name'>" + data[key].name + "</span>";
         html += "<div class='hue-buttons' style='display: flex; float: right;'>";
         if (data[key].state.on == true) {
           if (data[key].state.colormode == "ct") {
-            html += "<div onclick=\x22pickColor('light', 'kelvin', "+key+", '"+data[key].state.ct+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickColor('light', 'kelvin', "+key+", '"+data[key].state.ct+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           } else {
-            html += "<div onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickColor('light', 'kelvin', "+key+", '#"+hexcolor+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           }
-          html += "<div onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div onclick=\x22pickColor('light', 'rgb', "+key+", '#"+hexcolor+"');\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
           if (watchMode == 1) {
-            html += "<div onclick=\x22pickBrightness('light', "+key+", "+data[key].state.bri+", '#"+hexcolor+"');\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickBrightness('light', "+key+", "+data[key].state.bri+", '#"+hexcolor+"', '"+data[key].name+"');\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span><span class='watch-bri-text'>" + Math.round(data[key].state.bri/2.54) + "%</span></div>";
             html += "<br>";
           }
-          html += "<div id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div id='light-"+key+"-turnoff' onclick='hueLightToggle(["+key+"], false);' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
         } else {
           if (watchMode == 1) {
-            html += "<span style='color: #666; font-size: 24px;'>TURNED OFF</span><br>";
+            html += "<span style='color: #666; line-height: 123px; font-size: 50px;'>OFF</span><br>";
           }
-          html += "<div id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div id='light-"+key+"-turnon' onclick='hueLightToggle(["+key+"], true);' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
         }
         html += "</div>";
 
@@ -346,10 +338,12 @@ function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
       if(getCookie("debug") == "1") { console.log(data); }
       if(getCookie("debug") == "1") { console.log(data.length); }
       var html = "";
+      var lightsCounter = 0;
       Object.keys(data).forEach(function(key,index) {
         if ((data[key].type !== "Room") && (data[key].type !== "Zone")) {
           return;
         }
+        lightsCounter = lightsCounter + 1;
         if(getCookie("debug") == "1") { console.log(data[key]); }
         var hexcolor;
         if (data[key].action.colormode == "ct") {
@@ -383,26 +377,26 @@ function pickBrightness(mode, id, currentbrightness, currentcolor, groupid) {
           var hueStateClass = "turned-off";
         }
 
-        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup "+hueStateClass+"' id='huegroup-" + key + "'>";
+        html += "<div style='background-color: #" + hexcolor + "; color: "+hueLightBtnColor+";' class='card huegroup huegroup-n"+lightsCounter+" "+hueStateClass+"' id='huegroup-" + key + "'>";
         html += "<span class='hue-name'>" + data[key].name + "</span>";
         html += "<div class='hue-buttons' style='display: flex; float: right;'>";
         if (data[key].action.on == true) {
           if (data[key].action.colormode == "ct") {
-            html += "<div onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '"+data[key].action.ct+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '"+data[key].action.ct+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           } else {
-            html += "<div onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickColor('group', 'kelvin', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-tint' style='color: "+hueLightBtnColor+";'></i></span></div>";
           }
-          html += "<div onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div onclick=\x22pickColor('group', 'rgb', ["+data[key].lights+"], '#"+hexcolor+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-palette' style='color: "+hueLightBtnColor+";'></i></span></div>";
           if (watchMode == 1) {
-            html += "<div onclick=\x22pickBrightness('group', ["+data[key].lights+"], "+data[key].action.bri+", '#"+hexcolor+"', "+key+");\x22 style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span></div>";
+            html += "<div onclick=\x22pickBrightness('group', ["+data[key].lights+"], "+data[key].action.bri+", '#"+hexcolor+"', '"+data[key].name+"', "+key+");\x22 class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-adjust' style='color: "+hueLightBtnColor+";'></i></span><span class='watch-bri-text'>" + Math.round(data[key].action.bri/2.54) + "%</span></div>";
             html += "<br>";
           }
-          html += "<div id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div id='group-"+key+"-turnoff' onclick='hueLightToggle(["+data[key].lights+"], false);' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-on' style='color: "+hueLightBtnColor+";'></i></span></div>";
         } else {
           if (watchMode == 1) {
-            html += "<span style='color: #666; font-size: 24px;'>TURNED OFF</span><br>";
+            html += "<span style='color: #666; line-height: 123px; font-size: 50px;'>OFF</span><br>";
           }
-          html += "<div id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' style='width: 80px; height: 80px;' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
+          html += "<div id='group-"+key+"-turnon' onclick='hueLightToggle(["+data[key].lights+"], true);' class='hue-button'><span class='icon is-large'><i class='fas fa-2x fa-toggle-off' style='color: "+hueLightBtnColor+";'></i></span></div>";
         }
         html += "</div>";
         if (data[key].action.on == true) {

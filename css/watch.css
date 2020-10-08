@@ -1,5 +1,6 @@
 html, body {
   background-color: #000000;
+  overflow-y: hidden !important;
 }
 
 ::-webkit-scrollbar {
@@ -25,18 +26,21 @@ p.subtitle {
 #lights .huelight, #groups .huegroup {
   margin: 100px 0;
   height: 210px !important;
+  height: 100vh !important;
+  width: 100%;
   text-align: center !important;
-  padding: 10px 0 0 0;
-  border-radius: 100px;
+  padding: 10vh 0;
+  border-radius: 200px;
 }
 .hue-name {
   line-height: 40px !important;
+  font-size: 30px;
 }
 .hue-buttons {
   float: none !important;
   display: block !important;
   text-align: center;
-  height: 80px !important;
+  margin-top: 20px;
 }
 
 .watch-only {
@@ -51,6 +55,11 @@ p.subtitle {
   text-align: center;
   background-radius: 10px !important;
   position: relative;
+  font-size: 30px;
+  padding: 20px;
+  margin: 10px;
+  height: 90px;
+  width: 90px;
 }
 
 .settings-button {
@@ -94,7 +103,7 @@ p.subtitle {
 }
 
 #hue #groups, #hue #lights {
-  padding: 0 30px;
+  padding: 0 0;
 }
 
 .tabs.is-boxed li.is-active a {
@@ -141,4 +150,44 @@ p.subtitle {
 
 #brightness-picker .ldBar-label {
   font-size: 60px;
+}
+
+.hue-tabs {
+  top: 0;
+  margin-top: 0;
+  left: 0;
+  height: 100vh;
+  display: block;
+  background-color: black;
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+}
+.hue-tabs a {
+  border-radius: 0px !important;
+  border-top: 1px solid #3d3d67 !important;
+  border-bottom: 1px solid #3d3d67 !important;
+  height: 90px !important;
+  padding: 10px 0px !important;
+  color: #ddd !important;
+  font-size: 40px;
+}
+
+.watch-bri-text {
+  position: absolute;
+  width: 100%;
+  display: block;
+  left: 0;
+  text-align: center;
+  margin-top: -30px;
+  line-height: 24px;
+  font-size: 24px;
+}
+
+#brightness-picker .item-name {
+  font-size: 30px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 45px;
 }
